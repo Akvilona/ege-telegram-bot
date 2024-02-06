@@ -17,7 +17,6 @@ public class TelegramBotConfiguration {
 
     @Bean
     public TelegramBotsApi telegramBotsApi(MyTelegramBot myTelegramBot) {
-
         try {
             TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
             telegramBotsApi.registerBot(myTelegramBot);

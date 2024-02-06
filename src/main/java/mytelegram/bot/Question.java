@@ -1,7 +1,3 @@
-/**
- * Создал Андрей Антонов 2/5/2024 8:51 AM.
- **/
-
 package mytelegram.bot;
 
 import lombok.AllArgsConstructor;
@@ -15,9 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class Question {
     private Long id;
-    private String question;
+    private String description;
     private String solution;
-    private String ansver;
-    private String result;
+    private String answer;
 
 }

@@ -1,7 +1,3 @@
-/**
- * Создал Андрей Антонов 2/4/2024 7:51 PM.
- **/
-
 package mytelegram.bot;
 
 import lombok.extern.slf4j.Slf4j;
@@ -30,16 +26,25 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         sendMessage.setChatId(update.getMessage().getChatId());
 
         if (text.contains("/start")) {
-            sendMessage.setText("Привет! " +
-                    "\nЯ бот который помогает готовиться к экзамену ЕГЭ." +
-                    "\nНапиши номер вопроса в формате: 'Вопрос: 123' " +
-                    "\nчтобы начать.  ");
+            sendMessage.setText("""
+                Привет!
+                Я бот который помогает готовиться к экзамену ЕГЭ.
+                Напиши номер вопроса в формате: 'Вопрос: 123'
+                чтобы начать.""");
+        } else if ("/help".equals(text)) {
+            StringBuilder stringBuilder = new StringBuilder();
+            questionStore.getQuestionList().forEach(question ->
+                stringBuilder.append("Вопрос: '")
+                    .append(question.getId())
+                    .append("'\n"));
+            sendMessage.setText("Список вопросов: \n" + stringBuilder);
+
         } else if (text.toUpperCase().contains("ВОПРОС")) {
             Long questionNumber = Long.parseLong(text.substring(7).trim());
             sendMessage.setText("Вы выбрали вопрос: '" + questionNumber + "' \n\n" +
-                    "Вот его текст: " + questionStore.getQuestionById(questionNumber).getQuestion() + "\n\n" +
-                    "Решение: " + questionStore.getQuestionById(questionNumber).getSolution() + "\n\n" +
-                    "Ответ: " + questionStore.getQuestionById(questionNumber).getAnsver() + "\n"
+                "Вот его текст: " + questionStore.getQuestionById(questionNumber).getDescription() + "\n\n" +
+                "Решение: " + questionStore.getQuestionById(questionNumber).getSolution() + "\n\n" +
+                "Ответ: " + questionStore.getQuestionById(questionNumber).getAnswer() + "\n"
             );
         } else {
             sendMessage.setText("Вопрос: '" + text.trim() + "'\n\nв нашей безе ответов не найден.");
@@ -50,7 +55,6 @@ public class MyTelegramBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             log.error("Ошибка при отправке сообщения в Telegram.", e);
             throw new TelegramBotException("Не удалось отправить сообщение в Telegram.", e);
-
         }
     }
 
